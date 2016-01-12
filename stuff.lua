@@ -32,3 +32,11 @@ function checkCollision(canvas,x,y)
 		return false
 	end
 end
+
+function tableDiv(t,num)
+	local nT = {}
+	for _,x in pairs(t) do
+		table.insert(nT, x/num)
+	end
+	return nT
+end

@@ -8,12 +8,39 @@ us.cities = {}
 us.bases = {}
 us.bullets = {}
 
-function us:addAsteroid()
+function us:addAsteroid(infill, blockSize)
 	asteroid = {}
 	asteroid.x = love.math.random( love.graphics.getWidth()/4, love.graphics.getWidth()*3/4 )
 	asteroid.y = love.math.random( love.graphics.getHeight()/4, love.graphics.getHeight()*3/4 )
 	asteroid.rad = 200
+	asteroid.color = {255,128,0,255}
+
+	local w = love.graphics.getWidth() / blockSize
+	local h = love.graphics.getHeight() / blockSize
+	asteroid.canvas = love.graphics.newCanvas(w,h)
+
 	asteroid.points = randPolygon(16, asteroid.rad, asteroid.x, asteroid.y)
+	function drawPolygon()
+		love.graphics.polygon( "fill", tableDiv(asteroid.points,blockSize) )
+	end
+
+	love.graphics.setCanvas(asteroid.canvas)
+	love.graphics.stencil(drawPolygon,"replace",1)
+	love.graphics.setStencilTest("greater",0)
+	drawNoise(infill)
+	love.graphics.setStencilTest()
+
+	for x = 1,20 do
+		asteroid.canvas = smoothCanvas(asteroid.canvas,4,4)
+	end
+
+	asteroid.canvas = scaleCanvas(asteroid.canvas,blockSize)
+
+	for x = 1,4 do
+		asteroid.canvas = smoothCanvas(asteroid.canvas,5,5)
+	end
+
+	love.graphics.setCanvas()
 	table.insert(self.asteroids, asteroid)
 end
 

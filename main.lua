@@ -1,4 +1,5 @@
 require "stuff"
+require "graphics"
 require "projectiles"
 require "us"
 require "them"
@@ -13,14 +14,40 @@ gameOver = false
 kills = 0
 
 function love.load()
-	us:addAsteroid()
-	us:addAsteroid()
+	-- Load Shaders
+	explosionShaderCode = love.filesystem.read("shaders/explosionShader.glsl")
+	explosionShader = love.graphics.newShader( explosionShaderCode )
+	smoothShaderCode = love.filesystem.read("shaders/smoothShader.glsl")
+	smoothShader = love.graphics.newShader( smoothShaderCode )
+	maskShaderCode = love.filesystem.read("shaders/mask.glsl")
+	maskShader = love.graphics.newShader( maskShaderCode )
+
+	-- Load Textures
+	asteroidImg = love.graphics.newImage('textures/asteroid.png')
+	ourTrailImg = love.graphics.newImage('textures/redTrail.png')
+	theirTrailImg = love.graphics.newImage('textures/blueTrail.png')
+
+	-- Generate Asteroids
+	us:addAsteroid(60,4)
+	us:addAsteroid(60,4)
 	asteroidCanvas = love.graphics.newCanvas()
 	love.graphics.setCanvas(asteroidCanvas)
-	love.graphics.setColor(255,128,0)
-	for _,a in pairs(us.asteroids) do
-		love.graphics.polygon("fill", a.points)
+	local currentAsteroid = {}
+	function asteroidStencil()
+		love.graphics.setShader(maskShader)
+		love.graphics.draw(currentAsteroid.canvas)
+		love.graphics.setShader()
 	end
+	for _,a in pairs(us.asteroids) do
+		currentAsteroid = a
+		love.graphics.stencil(asteroidStencil, "replace", 1, true)
+		love.graphics.setStencilTest("greater", 0)
+		love.graphics.setColor(a.color)
+		love.graphics.draw(asteroidImg)
+		--love.graphics.polygon("fill", a.points)
+	end
+	love.graphics.setColor(255,255,255,255)
+	love.graphics.setStencilTest()
 	love.graphics.setCanvas()
 
 	us:addCity(us.asteroids[1])
@@ -38,14 +65,7 @@ function love.load()
 
 	-- Ghosts are bullets/missiles that have detonated, but whose particle systems are still active
 	ghosts = {}
-	ourTrailImg = love.graphics.newImage('texture3.png')
-	theirTrailImg = love.graphics.newImage('texture2.png')
 	
-	explosionShaderCode = love.filesystem.read("shaders/explosionShader.glsl")
-	explosionShader = love.graphics.newShader( explosionShaderCode )
-	smoothShaderCode = love.filesystem.read("shaders/smoothShader.glsl")
-	smoothShader = love.graphics.newShader( smoothShaderCode )
-
 	splosionCanvas1 = love.graphics.newCanvas()
 	splosionCanvas2 = love.graphics.newCanvas()
 
