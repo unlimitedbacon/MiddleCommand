@@ -10,11 +10,14 @@ function newProjectile(owner,x,y,tx,ty,speed)
 	local dh = speed / h
 	bullet.vx = dx * dh
 	bullet.vy = dy * dh
+	local theta = math.atan2(-bullet.vy,-bullet.vx)
 	-- Missile trails by Helvecta (https://love2d.org/forums/viewtopic.php?f=3&t=77704&start=10)
 	if owner == "us" then
 		bullet.trail = love.graphics.newParticleSystem(ourTrailImg, 32)
+		bullet.flame = love.graphics.newParticleSystem(ourFlameImg, 64)
 	else
 		bullet.trail = love.graphics.newParticleSystem(theirTrailImg, 32)
+		bullet.flame = love.graphics.newParticleSystem(theirFlameImg, 64)
 	end
 	bullet.trail:setEmissionRate(25)
 	bullet.trail:setSizes(2,3)
@@ -23,7 +26,21 @@ function newProjectile(owner,x,y,tx,ty,speed)
 	bullet.trail:setInsertMode("random")
 	bullet.trail:setParticleLifetime(0.5, 1)
 	bullet.trail:setColors(255, 255, 255, 25, 255, 255, 255, 0)
-	bullet.trail:setDirection(math.atan2(-bullet.vy,-bullet.vx))
+	bullet.trail:setDirection(theta)
+	--bullet.flame:setSpeed(20, 80)
+	bullet.flame:setSpeed(speed,speed*4)
+	bullet.flame:setEmissionRate(100)
+	bullet.flame:setSizes(0.5, 1, 0)
+	bullet.flame:setAreaSpread("uniform", 2, 2)
+	bullet.flame:setInsertMode("random")
+	bullet.flame:setSizeVariation(1)
+	local flameLength = 20
+	bullet.flame:setParticleLifetime(0.25,0.5)
+	--bullet.flame:setParticleLifetime(flameLength/(speed*2),flameLength/speed)
+	bullet.flame:setRotation(theta,theta)
+	bullet.flame:setDirection(theta)
+	bullet.flame:setColors(255, 255, 255, 100, 255, 255, 255, 255, 255, 255, 255, 0)
+
 	return bullet
 end
 
@@ -43,6 +60,7 @@ function detonate(projectiles,i)
 	end
 	explode( projectiles[i].x, projectiles[i].y )
 	projectiles[i].trail:stop()
+	projectiles[i].flame:stop()
 	table.insert(ghosts, projectiles[i])
 	table.remove(projectiles, i)
 end
@@ -79,17 +97,7 @@ function updateProjectiles(projectiles,dt)
                 b.x = b.x + b.vx*dt
                 b.y = b.y + b.vy*dt
                 b.trail:update(dt)
-	end
-end
-
-function updateGhosts(dt)
-	for i,g in pairs(ghosts) do
-                g.x = g.x + g.vx*dt
-                g.y = g.y + g.vy*dt
-                g.trail:update(dt)
-		if g.trail:getCount() == 0 then
-			table.remove(ghosts, i)
-		end
+		b.flame:update(dt)
 	end
 end
 
@@ -97,7 +105,28 @@ function drawProjectiles(projectiles,r,g,b)
 	for _,p in pairs(projectiles) do
 		love.graphics.setColor(255,255,255)
 		love.graphics.draw(p.trail, p.x, p.y)
+		love.graphics.draw(p.flame, p.x, p.y)
 		love.graphics.setColor(r,g,b)
 		love.graphics.circle("fill", p.x, p.y, 5, 8)
+	end
+	love.graphics.setColor(255,255,255,255)
+end
+
+function updateGhosts(dt)
+	for i,g in pairs(ghosts) do
+                g.x = g.x + g.vx*dt
+                g.y = g.y + g.vy*dt
+                g.trail:update(dt)
+		g.flame:update(dt)
+		if g.trail:getCount() == 0 then
+			table.remove(ghosts, i)
+		end
+	end
+end
+
+function drawGhosts()
+	for _,g in pairs(ghosts) do
+		love.graphics.draw(g.trail, g.x, g.y)
+		love.graphics.draw(g.flame, g.x, g.y)
 	end
 end

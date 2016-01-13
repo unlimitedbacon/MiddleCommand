@@ -25,7 +25,9 @@ function love.load()
 	-- Load Textures
 	asteroidImg = love.graphics.newImage('textures/asteroid.png')
 	ourTrailImg = love.graphics.newImage('textures/redTrail.png')
+	ourFlameImg = love.graphics.newImage('textures/redFlame.png')
 	theirTrailImg = love.graphics.newImage('textures/blueTrail.png')
+	theirFlameImg = love.graphics.newImage('textures/blueFlame.png')
 
 	-- Generate Asteroids
 	us:addAsteroid(60,4)
@@ -152,9 +154,7 @@ function love.draw()
 	drawProjectiles(them.missiles,0,0,255)
 
 	-- Ghosts
-	for _,g in pairs(ghosts) do
-		love.graphics.draw(g.trail, g.x, g.y)
-	end
+	drawGhosts()
 
 	-- Explosions
 	love.graphics.setColor(255,255,0)
