@@ -29,10 +29,21 @@ function love.load()
 	theirTrailImg = love.graphics.newImage('textures/blueTrail.png')
 	theirFlameImg = love.graphics.newImage('textures/blueFlame.png')
 
+	-- Load Fonts
+	gameOverFont = love.graphics.newFont(64)
+	hudFont = love.graphics.newFont(32)
+
+	-- Setup Canvases
+	-- asteroidCanvas also has cities and bases
+	-- Basically, it includes everything you can hit
+	asteroidCanvas = love.graphics.newCanvas()
+	-- Explosions are swapped between canvases in order to force the GPU to serialize drawing
+	splosionCanvas1 = love.graphics.newCanvas()
+	splosionCanvas2 = love.graphics.newCanvas()
+
 	-- Generate Asteroids
 	us:addAsteroid(60,4)
 	us:addAsteroid(60,4)
-	asteroidCanvas = love.graphics.newCanvas()
 	love.graphics.setCanvas(asteroidCanvas)
 	local currentAsteroid = {}
 	function asteroidStencil()
@@ -50,29 +61,36 @@ function love.load()
 	end
 	love.graphics.setColor(255,255,255,255)
 	love.graphics.setStencilTest()
-	love.graphics.setCanvas()
 
+	-- Generate Cities
 	us:addCity(us.asteroids[1])
 	us:addCity(us.asteroids[2])
+	-- Draw cities to asteroid canvas
+	love.graphics.setColor(255,255,255)
+	for _,c in pairs(us.cities) do
+		love.graphics.rectangle("fill", c.x-10, c.y-5, 20, 10)
+	end
 
+	-- Generate Bases
 	us.bases.left = us.newBase()
 	us.bases.right = us.newBase()
 	if us.bases.left.x > us.bases.right.x then
 		us.bases.left, us.bases.right = us.bases.right, us.bases.left
 	end
+	-- Draw bases to asteroid canvas
+	love.graphics.setColor(255,255,255)
+	for _,b in pairs(us.bases) do
+		love.graphics.circle("fill", b.x, b.y, 20, 6)
+	end
+
+	love.graphics.setCanvas()
 	
-	explosions = {}
 
 	enemyCountdown = enemyDelay
 
 	-- Ghosts are bullets/missiles that have detonated, but whose particle systems are still active
 	ghosts = {}
-	
-	splosionCanvas1 = love.graphics.newCanvas()
-	splosionCanvas2 = love.graphics.newCanvas()
-
-	gameOverFont = love.graphics.newFont(64)
-	hudFont = love.graphics.newFont(32)
+	explosions = {}
 end
 
 function love.update(dt)
@@ -132,20 +150,8 @@ function love.draw()
 	love.graphics.setBackgroundColor(0,0,0)
 	love.graphics.setColor(255,255,255,255)
 
-	-- Asteroids
+	-- Asteroids, Cities, and Bases
 	love.graphics.draw(asteroidCanvas)
-
-	-- Cities
-	love.graphics.setColor(255,255,255)
-	for _,c in pairs(us.cities) do
-		love.graphics.rectangle("fill", c.x-10, c.y-5, 20, 10)
-	end
-
-	-- Bases
-	love.graphics.setColor(255,255,255)
-	for _,b in pairs(us.bases) do
-		love.graphics.circle("fill", b.x, b.y, 20, 6)
-	end
 
 	-- Bullets
 	drawProjectiles(us.bullets,255,0,0)

@@ -1,6 +1,7 @@
 function newProjectile(owner,x,y,tx,ty,speed)
 	bullet = {}
 	bullet.owner = owner
+	bullet.armed = false
 	bullet.x = x
 	bullet.y = y
 	bullet.tx, bullet.ty = tx, ty
@@ -77,9 +78,15 @@ function updateProjectiles(projectiles,dt)
                 end
                 -- Explode on collision
                 if checkCollision(asteroidCanvas,b.x,b.y) then
-			detonate(projectiles, i)
-			break
-                end
+			if b.armed then
+				detonate(projectiles, i)
+				break
+			end
+		else
+			-- Bullets are not armed until they go outside.
+			-- That way they do not explode inside the base.
+			b.armed = true
+		end
                 -- Explode if exploded
                 if checkCollision(splosionCanvas1,b.x,b.y) then
 			detonate(projectiles, i)
