@@ -1,6 +1,6 @@
 them = {}
 
-them.missileSpeed = 20
+them.missileSpeed = 30
 
 them.missiles = {}
 

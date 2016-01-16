@@ -4,7 +4,7 @@ require "projectiles"
 require "us"
 require "them"
 
-explodeRate = 25
+explodeRate = 40
 explodeSize = 50
 
 enemyDelay = 5.0
@@ -23,6 +23,7 @@ function love.load()
 	maskShader = love.graphics.newShader( maskShaderCode )
 
 	-- Load Textures
+	backgroundImg = love.graphics.newImage('textures/starfield.png')
 	asteroidImg = love.graphics.newImage('textures/asteroid.png')
 	ourTrailImg = love.graphics.newImage('textures/redTrail.png')
 	ourFlameImg = love.graphics.newImage('textures/redFlame.png')
@@ -150,6 +151,9 @@ function love.draw()
 	love.graphics.setBackgroundColor(0,0,0)
 	love.graphics.setColor(255,255,255,255)
 
+	-- Starfield
+	love.graphics.draw(backgroundImg)
+
 	-- Asteroids, Cities, and Bases
 	love.graphics.draw(asteroidCanvas)
 
@@ -186,10 +190,11 @@ function love.draw()
 		love.graphics.circle("fill", e.x, e.y, e.rad, 32)
 	end
 	love.graphics.setCanvas()
-	love.graphics.setBlendMode("alpha")
+	love.graphics.setBlendMode("subtract")
 	-- For some reason, the canvas's colors are getting overridden
-	love.graphics.setColor(255,255,0)
+	love.graphics.setColor(255,255,255)
 	love.graphics.draw(splosionCanvas2)
+	love.graphics.setBlendMode("alpha")
 	
 	love.graphics.setColor(255,255,255,128)
 	love.graphics.setFont(hudFont)

@@ -1,6 +1,6 @@
 us = {}
 
-us.bulletSpeed = 30
+us.bulletSpeed = 50
 us.cooldown = 10
 
 us.asteroids = {}
