@@ -190,8 +190,8 @@ function love.draw()
 		love.graphics.circle("fill", e.x, e.y, e.rad, 32)
 	end
 	love.graphics.setCanvas()
-	love.graphics.setBlendMode("subtract")
-	-- For some reason, the canvas's colors are getting overridden
+	love.graphics.setBlendMode("add")
+	-- Use subtract for a cloaking device effect
 	love.graphics.setColor(255,255,255)
 	love.graphics.draw(splosionCanvas2)
 	love.graphics.setBlendMode("alpha")
