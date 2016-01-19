@@ -22,8 +22,10 @@ end
 function checkCollision(canvas,x,y)
 	if onScreen(x,y) then
 		local imgData = canvas:newImageData(x,y,1,1)
-		local r,_,_,_ = imgData:getPixel(0,0)
-		if r == 0 then
+		local r,g,b,a = imgData:getPixel(0,0)
+		-- By not checking the alpha channel, this allows us to have
+		-- invisble objects
+		if (r == 0 and g==0 and b==0) then
 			return false
 		else
 			return true

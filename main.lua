@@ -25,6 +25,7 @@ function love.load()
 	-- Load Textures
 	backgroundImg = love.graphics.newImage('textures/starfield.png')
 	asteroidImg = love.graphics.newImage('textures/asteroid.png')
+	baseImg = love.graphics.newImage('textures/base.png')
 	ourTrailImg = love.graphics.newImage('textures/redTrail.png')
 	ourFlameImg = love.graphics.newImage('textures/redFlame.png')
 	theirTrailImg = love.graphics.newImage('textures/blueTrail.png')
@@ -81,7 +82,8 @@ function love.load()
 	-- Draw bases to asteroid canvas
 	love.graphics.setColor(255,255,255)
 	for _,b in pairs(us.bases) do
-		love.graphics.circle("fill", b.x, b.y, 20, 6)
+		love.graphics.draw(baseImg, b.x-42, b.y-25)
+		--love.graphics.circle("fill", b.x, b.y, 20, 6)
 	end
 
 	love.graphics.setCanvas()
