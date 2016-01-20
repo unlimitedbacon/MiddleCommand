@@ -3,6 +3,7 @@ require "graphics"
 require "projectiles"
 require "us"
 require "them"
+require "hud"
 
 explodeRate = 40
 explodeSize = 50
@@ -209,9 +210,7 @@ function love.draw()
 	love.graphics.draw(splosionCanvas2)
 	love.graphics.setBlendMode("alpha")
 	
-	love.graphics.setColor(255,255,255,128)
-	love.graphics.setFont(hudFont)
-	love.graphics.print( kills, 20, 20 )
+	drawHUD()
 
 	if gameOver then
 		love.graphics.setColor(255,255,255,128)

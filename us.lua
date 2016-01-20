@@ -74,15 +74,17 @@ function us:newBase()
 	base = {}
 	base.x = love.math.random( love.graphics.getWidth() )
 	base.y = love.math.random( love.graphics.getHeight() )
+	base.ammo = 400
 	base.cooldown = 10
 	base.bulletSpeed = 200
 
 	function base:fire()
-		if self.cooldown <= 0 then
+		if self.cooldown <= 0 and self.ammo > 0 then
 			self.cooldown = 10
 			local tx, ty = love.mouse.getPosition()
 			bullet = newProjectile( "us", self.x, self.y, tx, ty, self.bulletSpeed )
 			table.insert(us.bullets, bullet)
+			self.ammo = self.ammo - 1
 			love.audio.newSource("pop.ogg", "static"):play()
 		end
 	end
