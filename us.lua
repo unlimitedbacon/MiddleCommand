@@ -61,6 +61,12 @@ function us:addCity(asteroid)
 	local b = y1 - m*x1
 	city.x = love.math.random( x1, x2 )
 	city.y = m*city.x + b
+	-- Rotate city normal to asteroid
+	city.angle = math.atan(m)
+	local ay = m*asteroid.x + b
+	if ay > city.y then
+		city.angle = city.angle + math.pi
+	end
 	table.insert(self.cities, city)
 end
 

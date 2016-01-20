@@ -26,6 +26,7 @@ function love.load()
 	backgroundImg = love.graphics.newImage('textures/starfield.png')
 	asteroidImg = love.graphics.newImage('textures/asteroid.png')
 	baseImg = love.graphics.newImage('textures/base.png')
+	cityImg = love.graphics.newImage('textures/city.png')
 	ourTrailImg = love.graphics.newImage('textures/redTrail.png')
 	ourFlameImg = love.graphics.newImage('textures/redFlame.png')
 	theirTrailImg = love.graphics.newImage('textures/blueTrail.png')
@@ -59,18 +60,26 @@ function love.load()
 		love.graphics.setStencilTest("greater", 0)
 		love.graphics.setColor(a.color)
 		love.graphics.draw(asteroidImg)
-		--love.graphics.polygon("fill", a.points)
 	end
 	love.graphics.setColor(255,255,255,255)
 	love.graphics.setStencilTest()
+	-- Asteroid debugging stuff
+	--love.graphics.setColor(255,0,0)
+	--for _,a in pairs(us.asteroids) do
+	--	love.graphics.polygon("line", a.points)
+	--	love.graphics.circle("fill", a.x, a.y, 5, 10)
+	--end
 
 	-- Generate Cities
 	us:addCity(us.asteroids[1])
 	us:addCity(us.asteroids[2])
 	-- Draw cities to asteroid canvas
+	cityImgW = cityImg:getWidth()
+	cityImgH = cityImg:getHeight()
 	love.graphics.setColor(255,255,255)
 	for _,c in pairs(us.cities) do
-		love.graphics.rectangle("fill", c.x-10, c.y-5, 20, 10)
+		love.graphics.draw(cityImg, c.x, c.y, c.angle, 1, 1, cityImgW/2, cityImgH-5)
+		--love.graphics.rectangle("fill", c.x-10, c.y-5, 20, 10)
 	end
 
 	-- Generate Bases
@@ -80,9 +89,11 @@ function love.load()
 		us.bases.left, us.bases.right = us.bases.right, us.bases.left
 	end
 	-- Draw bases to asteroid canvas
+	baseImgW = baseImg:getWidth()
+	baseImgH = baseImg:getHeight()
 	love.graphics.setColor(255,255,255)
 	for _,b in pairs(us.bases) do
-		love.graphics.draw(baseImg, b.x-42, b.y-25)
+		love.graphics.draw(baseImg, b.x, b.y, 0, 1, 1, baseImgW/2, baseImgH/2)
 		--love.graphics.circle("fill", b.x, b.y, 20, 6)
 	end
 
