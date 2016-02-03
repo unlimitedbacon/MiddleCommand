@@ -74,7 +74,7 @@ function us:newBase()
 	base = {}
 	base.x = love.math.random( love.graphics.getWidth() )
 	base.y = love.math.random( love.graphics.getHeight() )
-	base.ammo = 400
+	base.ammo = curLevel.ourAmmo
 	base.cooldown = 10
 	base.bulletSpeed = 200
 

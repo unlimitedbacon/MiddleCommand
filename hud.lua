@@ -1,19 +1,22 @@
 function drawHUD()
+	local xMargin = 20
+	local yMargin = 20
 	local fontSize = hudFont:getHeight()
-	print(fontSize)
+	local w = love.graphics.getWidth()
+	local h = love.graphics.getHeight()
 
 	-- Kill count
 	love.graphics.setColor(255,255,255,128)
 	love.graphics.setFont(hudFont)
-	love.graphics.print( "Kills: "..kills, 20, 20 )
+	love.graphics.print( "Kills: "..kills, xMargin, yMargin )
+	-- Enemys remaining
+	love.graphics.print( "Incoming Missiles: "..them.ammo, xMargin, yMargin+fontSize )
+	-- Level
+	love.graphics.printf( "Level: "..curLevelNum, 0, yMargin, w-xMargin, "right")
 
 	-- Ammo bar
 	local barHeight = 32
 	local barWidth = 400
-	local xMargin = 20
-	local yMargin = 20
-	local w = love.graphics.getWidth()
-	local h = love.graphics.getHeight()
 	-- TODO: If ammo > barWidth, double draw ammo bar
 	if us.bases.left then
 		love.graphics.rectangle( "line", xMargin-3, h-yMargin-barHeight-3, barWidth+6, barHeight+6 )

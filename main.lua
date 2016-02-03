@@ -1,3 +1,4 @@
+require "levels"
 require "stuff"
 require "graphics"
 require "projectiles"
@@ -8,9 +9,7 @@ require "hud"
 explodeRate = 40
 explodeSize = 50
 
-enemyDelay = 5.0
-enemyDelayDecay = 0.99
-
+curLevelNum = 1
 gameOver = false
 kills = 0
 
@@ -45,9 +44,17 @@ function love.load()
 	splosionCanvas1 = love.graphics.newCanvas()
 	splosionCanvas2 = love.graphics.newCanvas()
 
+	-- Load level
+	curLevel = levels[curLevelNum]
+	enemyDelay = curLevel.enemyDelay
+	enemyDelayDecay = curLevel.enemyDelayDecay
+	enemyCountdown = enemyDelay
+	them.ammo = curLevel.theirAmmo
+
 	-- Generate Asteroids
-	us:addAsteroid(60,4)
-	us:addAsteroid(60,4)
+	for i=1, curLevel.numAsteroids do
+		us:addAsteroid(60,4)
+	end
 	love.graphics.setCanvas(asteroidCanvas)
 	local currentAsteroid = {}
 	function asteroidStencil()
@@ -72,8 +79,10 @@ function love.load()
 	--end
 
 	-- Generate Cities
-	us:addCity(us.asteroids[1])
-	us:addCity(us.asteroids[2])
+	for i=1, curLevel.numCities do
+		x = love.math.random(curLevel.numAsteroids)
+		us:addCity(us.asteroids[x])
+	end
 	-- Draw cities to asteroid canvas
 	cityImgW = cityImg:getWidth()
 	cityImgH = cityImg:getHeight()
@@ -100,9 +109,6 @@ function love.load()
 
 	love.graphics.setCanvas()
 	
-
-	enemyCountdown = enemyDelay
-
 	-- Ghosts are bullets/missiles that have detonated, but whose particle systems are still active
 	ghosts = {}
 	explosions = {}

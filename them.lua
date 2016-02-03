@@ -2,6 +2,7 @@ them = {}
 
 them.missileSpeed = 30
 
+them.ammo = 0
 them.missiles = {}
 
 function them:fire()
@@ -16,5 +17,6 @@ function them:fire()
 	local ty = us.cities[city].y
 	-- Launch projectile
 	local missile = newProjectile( "them", x, y, tx, ty, self.missileSpeed )
+	self.ammo = self.ammo - 1
 	table.insert(self.missiles, missile)
 end
