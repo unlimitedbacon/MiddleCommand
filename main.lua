@@ -5,6 +5,7 @@ require "projectiles"
 require "us"
 require "them"
 require "hud"
+require "ui"
 
 explodeRate = 40
 explodeSize = 50
@@ -219,6 +220,7 @@ function love.draw()
 	drawHUD()
 
 	if gameOver then
+		uiBox( love.graphics.getWidth()/2-170, love.graphics.getHeight()/2-32, 340, 72 )
 		love.graphics.setColor(255,255,255,128)
 		love.graphics.setFont(gameOverFont)
 		love.graphics.printf( "YOU DIED", 0, love.graphics.getHeight()/2-32, love.graphics.getWidth() , "center" )
