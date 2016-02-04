@@ -96,6 +96,8 @@ function love.load()
 	-- Generate Bases
 	us.bases.left = us.newBase()
 	us.bases.right = us.newBase()
+	us.bases[1] = us.bases.left
+	us.bases[2] = us.bases.right
 	if us.bases.left.x > us.bases.right.x then
 		us.bases.left, us.bases.right = us.bases.right, us.bases.left
 	end

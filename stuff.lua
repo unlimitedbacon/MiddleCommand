@@ -42,3 +42,15 @@ function tableDiv(t,num)
 	end
 	return nT
 end
+
+function catTables(tableOfTables)
+	local i = 1
+	local new = {}
+	for _,t in ipairs(tableOfTables) do
+		for _,v in ipairs(t) do
+			new[i] = v
+			i = i + 1
+		end
+	end
+	return new
+end
