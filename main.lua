@@ -12,6 +12,7 @@ explodeSize = 50
 
 curLevelNum = 1
 gameOver = false
+levelWon = false
 kills = 0
 
 function love.load()
@@ -126,7 +127,7 @@ function love.update(dt)
 	end
 
 	for i,b in pairs(us.bases) do
-		b.cooldown = b.cooldown - 1
+		b.cooldownTimer = b.cooldownTimer - dt
 		if checkCollision(splosionCanvas1,b.x,b.y) then
 			explode(b.x,b.y)
 			us.bases[i] = nil
@@ -167,6 +168,10 @@ function love.update(dt)
 
 	if table.getn(us.cities) == 0 then
 		gameOver = true
+	end
+
+	if them.ammo == 0 and table.getn(them.missiles) == 0 and not gameOver then
+		levelWon = true
 	end
 end
 
@@ -226,6 +231,12 @@ function love.draw()
 		love.graphics.setColor(255,255,255,128)
 		love.graphics.setFont(gameOverFont)
 		love.graphics.printf( "YOU DIED", 0, love.graphics.getHeight()/2-32, love.graphics.getWidth() , "center" )
+	end
+	if levelWon and not gameOver then
+		uiBox( love.graphics.getWidth()/2-170, love.graphics.getHeight()/2-32, 340, 72 )
+		love.graphics.setColor(255,255,255,128)
+		love.graphics.setFont(gameOverFont)
+		love.graphics.printf( "YOU WIN", 0, love.graphics.getHeight()/2-32, love.graphics.getWidth() , "center" )
 	end
 end
 

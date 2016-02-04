@@ -75,12 +75,13 @@ function us:newBase()
 	base.x = love.math.random( love.graphics.getWidth() )
 	base.y = love.math.random( love.graphics.getHeight() )
 	base.ammo = curLevel.ourAmmo
-	base.cooldown = 10
+	base.cooldown = 0.3
+	base.cooldownTimer = 0
 	base.bulletSpeed = 200
 
 	function base:fire()
-		if self.cooldown <= 0 and self.ammo > 0 then
-			self.cooldown = 10
+		if self.cooldownTimer <= 0 and self.ammo > 0 then
+			self.cooldownTimer = self.cooldown
 			local tx, ty = love.mouse.getPosition()
 			bullet = newProjectile( "us", self.x, self.y, tx, ty, self.bulletSpeed )
 			table.insert(us.bullets, bullet)
