@@ -15,6 +15,13 @@ gameOver = false
 kills = 0
 
 function love.load()
+	-- Loading Screen
+	backgroundImg = love.graphics.newImage('textures/starfield.png')
+	messageFont = love.graphics.newFont(64)
+	love.graphics.draw(backgroundImg)
+	textInABox("Loading...")
+	love.graphics.present()
+	
 	-- Load Shaders
 	explosionShaderCode = love.filesystem.read("shaders/explosionShader.glsl")
 	explosionShader = love.graphics.newShader( explosionShaderCode )
@@ -24,7 +31,6 @@ function love.load()
 	maskShader = love.graphics.newShader( maskShaderCode )
 
 	-- Load Textures
-	backgroundImg = love.graphics.newImage('textures/starfield.png')
 	asteroidImg = love.graphics.newImage('textures/asteroid.png')
 	baseImg = love.graphics.newImage('textures/base.png')
 	cityImg = love.graphics.newImage('textures/city.png')
@@ -34,7 +40,6 @@ function love.load()
 	theirFlameImg = love.graphics.newImage('textures/blueFlame.png')
 
 	-- Load Fonts
-	gameOverFont = love.graphics.newFont(64)
 	hudFont = love.graphics.newFont(32)
 
 	-- Setup Canvases
