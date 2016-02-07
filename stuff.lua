@@ -1,12 +1,71 @@
+function between(x,a,b)
+	local min = math.min(a,b)
+	local max = math.max(a,b)
+	if x >= min and x <= max then
+		return true
+	else
+		return false
+	end
+end
+
+function intersect(x1,y1,x2,y2,x3,y3,x4,y4)
+	m1 = (y2-y1) / (x2-x1)
+	b1 = y1 - m1*x1
+	m2 = (y4-y3) / (x4-x3)
+	b2 = y3 - m2*x3
+	if m1 == m2 then
+		if b1 == b2 then
+			return true
+		else
+			return false
+		end
+	end
+	ix = (b2-b1) / (m1-m2)
+	if between(ix,x1,x2) and between(ix,x3,x4) then
+		return true
+	else
+		return false
+	end
+end
+
+--function randPolygon(sides,rad,cx,cy)
+--	local points = {}
+--	for i = 1, sides do
+--		x = love.math.random(-rad,rad) + cx
+--		y = love.math.random(-rad,rad) + cy
+--		table.insert(points, x)
+--		table.insert(points, y)
+--	end
+--	return points
+--end
 function randPolygon(sides,rad,cx,cy)
 	local points = {}
-	for i = 1, sides do
-		x = love.math.random(-rad,rad) + cx
-		y = love.math.random(-rad,rad) + cy
-		table.insert(points, x)
-		table.insert(points, y)
+	local theta = 2*math.pi/sides
+	local var = 40
+	-- Create a circle
+	local t = 0
+	for s = 1, sides do
+		points[s] = {}
+		points[s].x = rad*math.cos(t) + cx
+		points[s].y = rad*math.sin(t) + cy
+		t = t + theta
 	end
-	return points
+	-- Move points around randomly
+	for s = 1, sides do
+		local intersecting = true
+		x = love.math.random(points[s].x-var,points[s].x+var)
+		y = love.math.random(points[s].y-var,points[s].y+var)
+		points[s].x = x
+		points[s].y = y
+	end
+	-- Reformat for love.graphics.polygon()
+	local npoints = {}
+	for _, v in pairs(points) do
+		table.insert(npoints, v.x)
+		table.insert(npoints, v.y)
+	end
+	return npoints
+
 end
 
 function onScreen(x,y)

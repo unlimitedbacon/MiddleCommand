@@ -60,7 +60,7 @@ function love.load()
 
 	-- Generate Asteroids
 	for i=1, curLevel.numAsteroids do
-		us:addAsteroid(60,4)
+		us:addAsteroid(50,4)
 	end
 	love.graphics.setCanvas(asteroidCanvas)
 	local currentAsteroid = {}
