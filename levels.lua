@@ -6,6 +6,6 @@ levels[1] = {
 	numAsteroids = 2,	-- Number of Asteroids
 	numCities = 2,		-- Number of cities
 	ourAmmo = 400,		-- Starting ammo given to each base
-	theirAmmo = 100,	-- Number of enemy missiles that get fired before the level ends
-	targetBases = false	-- Whether or not enemies will target the missile bases in addition to the cities
+	theirAmmo = 10,	-- Number of enemy missiles that get fired before the level ends
+	targetBases = true	-- Whether or not enemies will target the missile bases in addition to the cities
 }

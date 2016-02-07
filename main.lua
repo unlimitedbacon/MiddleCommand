@@ -12,7 +12,6 @@ explodeSize = 50
 
 curLevelNum = 1
 gameOver = false
-levelWon = false
 kills = 0
 
 function love.load()
@@ -48,6 +47,7 @@ function love.load()
 
 	-- Load level
 	curLevel = levels[curLevelNum]
+	levelWon = false
 	enemyDelay = curLevel.enemyDelay
 	enemyDelayDecay = curLevel.enemyDelayDecay
 	enemyCountdown = enemyDelay
@@ -227,16 +227,10 @@ function love.draw()
 	drawHUD()
 
 	if gameOver then
-		uiBox( love.graphics.getWidth()/2-170, love.graphics.getHeight()/2-32, 340, 72 )
-		love.graphics.setColor(255,255,255,128)
-		love.graphics.setFont(gameOverFont)
-		love.graphics.printf( "YOU DIED", 0, love.graphics.getHeight()/2-32, love.graphics.getWidth() , "center" )
+		textInABox("YOUR DIED")
 	end
 	if levelWon and not gameOver then
-		uiBox( love.graphics.getWidth()/2-170, love.graphics.getHeight()/2-32, 340, 72 )
-		love.graphics.setColor(255,255,255,128)
-		love.graphics.setFont(gameOverFont)
-		love.graphics.printf( "YOU WIN", 0, love.graphics.getHeight()/2-32, love.graphics.getWidth() , "center" )
+		textInABox("YOU WIN")
 	end
 end
 
