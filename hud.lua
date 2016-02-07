@@ -13,6 +13,8 @@ function drawHUD()
 	love.graphics.print( "Incoming Missiles: "..them.ammo, xMargin, yMargin+fontSize )
 	-- Level
 	love.graphics.printf( "Level: "..curLevelNum, 0, yMargin, w-xMargin, "right")
+	-- FPS
+	love.graphics.printf( "FPS: "..tostring(love.timer.getFPS()), 0, yMargin+fontSize, w-xMargin, "right")
 
 	-- Ammo bar
 	local barHeight = 32
