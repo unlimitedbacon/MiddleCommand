@@ -24,12 +24,9 @@ function love.load()
 	love.graphics.present()
 	
 	-- Load Shaders
-	explosionShaderCode = love.filesystem.read("shaders/explosionShader.glsl")
-	explosionShader = love.graphics.newShader( explosionShaderCode )
-	smoothShaderCode = love.filesystem.read("shaders/smoothShader.glsl")
-	smoothShader = love.graphics.newShader( smoothShaderCode )
-	maskShaderCode = love.filesystem.read("shaders/mask.glsl")
-	maskShader = love.graphics.newShader( maskShaderCode )
+	explosionShader = love.graphics.newShader("shaders/explosionShader.glsl")
+	smoothShader = love.graphics.newShader("shaders/smoothShader.glsl")
+	maskShader = love.graphics.newShader("shaders/mask.glsl")
 
 	-- Load Textures
 	asteroidImg = love.graphics.newImage('textures/asteroid.png')
