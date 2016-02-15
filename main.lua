@@ -175,7 +175,7 @@ function love.draw()
 		textInABox("YOUR DIED")
 	end
 	if levelWon and not gameOver then
-		textInABox("YOU WIN")
+		textInABox("YOU WIN\nPress Enter")
 	end
 end
 

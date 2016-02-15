@@ -3,6 +3,11 @@ function textInABox(string)
 	local ym = 6
 	local w = messageFont:getWidth(string)
 	local h = messageFont:getHeight(string)
+	local n = 1
+	for i in string:gmatch("\n") do
+		n = n + 1
+	end
+	h = h * n
 	local sw = love.graphics.getWidth()
 	local sh = love.graphics.getHeight()
 	love.graphics.setColor(0,0,0,64)
