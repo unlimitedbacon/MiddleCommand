@@ -16,6 +16,9 @@ gameOver = false
 kills = 0
 
 function love.load()
+	for k,v in pairs(love.graphics.getSystemLimits()) do
+		print(k,v)
+	end
 	-- Loading Screen
 	backgroundImg = love.graphics.newImage('textures/starfield.png')
 	messageFont = love.graphics.newFont(64)
@@ -139,10 +142,17 @@ function love.draw()
 	-- Explosions
 	love.graphics.setColor(255,255,0)
 	love.graphics.setShader(explosionShader)
-	love.graphics.setCanvas(splosionCanvas1,splosionCanvas2)
-	love.graphics.clear()
+	love.graphics.setCanvas(splosionCanvas1)
+	love.graphics.clear(0,0,0,0)
+	love.graphics.setCanvas(splosionCanvas2)
+	love.graphics.clear(0,0,0,0)
 	for _,e in pairs(explosions) do
-		love.graphics.setCanvas(splosionCanvas1,splosionCanvas2)
+		love.graphics.setCanvas(splosionCanvas1)
+		love.graphics.setColor(255,255,0)
+		explosionShader:send("explosionCanvas",splosionCanvas2)
+		love.graphics.circle("fill", e.x, e.y, e.rad, 32)
+		love.graphics.setCanvas(splosionCanvas2)
+		love.graphics.setColor(255,255,0)
 		explosionShader:send("explosionCanvas",splosionCanvas1)
 		love.graphics.circle("fill", e.x, e.y, e.rad, 32)
 		splosionCanvas1, splosionCanvas2 = splosionCanvas2, splosionCanvas1
@@ -163,7 +173,7 @@ function love.draw()
 	love.graphics.setBlendMode("add")
 	-- Use subtract for a cloaking device effect
 	love.graphics.setColor(255,255,255)
-	love.graphics.draw(splosionCanvas2)
+	love.graphics.draw(splosionCanvas1)
 	love.graphics.setBlendMode("alpha")
 	
 	drawHUD()
