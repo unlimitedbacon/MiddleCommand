@@ -64,8 +64,9 @@ function loadLevel(levelNum)
 	baseImgW = baseImg:getWidth()
 	baseImgH = baseImg:getHeight()
 	love.graphics.setColor(255,255,255)
-	for _,b in pairs(us.bases) do
-		love.graphics.draw(baseImg, b.x, b.y, 0, 1, 1, baseImgW/2, baseImgH/2)
+	for _,b in ipairs(us.bases) do
+		love.graphics.draw(baseImg, b.x, b.y, 0, 1, 1, math.ceil(baseImgW/2), math.ceil(baseImgH/2))
+		--print(b.x-math.ceil(baseImgW/2),b.y-math.ceil(baseImgH/2),b.x,b.y)
 		--love.graphics.circle("fill", b.x, b.y, 20, 6)
 	end
 
