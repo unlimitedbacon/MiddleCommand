@@ -16,15 +16,22 @@ gameOver = false
 kills = 0
 
 function love.load()
-	for k,v in pairs(love.graphics.getSystemLimits()) do
-		print(k,v)
-	end
 	-- Loading Screen
 	backgroundImg = love.graphics.newImage('textures/starfield.png')
 	messageFont = love.graphics.newFont(64)
 	love.graphics.draw(backgroundImg)
 	textInABox("Loading...")
 	love.graphics.present()
+
+	-- Check System Specs
+	for k,v in pairs(love.graphics.getSystemLimits()) do
+		print(k,v)
+	end
+	if love.graphics.getSystemLimits()['multicanvas'] > 1 then
+		multicanvas = true
+	else
+		multicanvas = false
+	end
 	
 	-- Load Shaders
 	explosionShader = love.graphics.newShader("shaders/explosionShader.glsl")
@@ -140,42 +147,9 @@ function love.draw()
 	drawGhosts()
 
 	-- Explosions
-	love.graphics.setColor(255,255,0)
-	love.graphics.setShader(explosionShader)
-	love.graphics.setCanvas(splosionCanvas1)
-	love.graphics.clear(0,0,0,0)
-	love.graphics.setCanvas(splosionCanvas2)
-	love.graphics.clear(0,0,0,0)
-	for _,e in pairs(explosions) do
-		love.graphics.setCanvas(splosionCanvas1)
-		love.graphics.setColor(255,255,0)
-		explosionShader:send("explosionCanvas",splosionCanvas2)
-		love.graphics.circle("fill", e.x, e.y, e.rad, 32)
-		love.graphics.setCanvas(splosionCanvas2)
-		love.graphics.setColor(255,255,0)
-		explosionShader:send("explosionCanvas",splosionCanvas1)
-		love.graphics.circle("fill", e.x, e.y, e.rad, 32)
-		splosionCanvas1, splosionCanvas2 = splosionCanvas2, splosionCanvas1
-		-- Using two canvases and swapping them forces the GPU to flush the render queue.
-		-- Otherwise, it tries to start drawing the second circle
-		-- before drawing of the first circle is finished.
-		-- https://love2d.org/forums/viewtopic.php?t=81482
-	end
-	love.graphics.setShader()
-	-- Remove chunks of asteroid
-	love.graphics.setCanvas(asteroidCanvas)
-	love.graphics.setColor(0,0,0,0)
-	love.graphics.setBlendMode("replace")
-	for _,e in pairs(explosions) do
-		love.graphics.circle("fill", e.x, e.y, e.rad, 32)
-	end
-	love.graphics.setCanvas()
-	love.graphics.setBlendMode("add")
-	-- Use subtract for a cloaking device effect
-	love.graphics.setColor(255,255,255)
-	love.graphics.draw(splosionCanvas1)
-	love.graphics.setBlendMode("alpha")
+	drawExplosions()
 	
+	-- HUD
 	drawHUD()
 
 	if gameOver then
