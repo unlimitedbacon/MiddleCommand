@@ -24,6 +24,8 @@ function love.load()
 	love.graphics.present()
 
 	-- Check System Specs
+	os = love.system.getOS()
+	print(os)
 	for k,v in pairs(love.graphics.getSystemLimits()) do
 		print(k,v)
 	end
@@ -37,7 +39,7 @@ function love.load()
 	explosionShader = love.graphics.newShader("shaders/explosionShader.glsl")
 	smoothShader = love.graphics.newShader("shaders/smoothShader.glsl")
 	maskShader = love.graphics.newShader("shaders/mask.glsl")
-	glowShader = love.graphics.newShader("shaders/glow.glsl")
+	--glowShader = love.graphics.newShader("shaders/glow.glsl")
 
 	-- Load Textures
 	asteroidImg = love.graphics.newImage('textures/asteroid.png')
@@ -67,13 +69,17 @@ function love.load()
 end
 
 function love.update(dt)
-	if love.mouse.isDown(1) and us.bases.left then
-		us.bases.left:fire()
-		us.selectedBase = us.bases.left
-	end
-	if love.mouse.isDown(2) and us.bases.right then
-		us.bases.right:fire()
-		us.selectedBase = us.bases.right
+	-- Only check for mouse presses on a PC,
+	-- because on touches register as mouse clicks on Android
+	if os ~= "Android" and os~= "iOS" then
+		if love.mouse.isDown(1) and us.bases.left then
+			us.bases.left:fire()
+			us.selectedBase = us.bases.left
+		end
+		if love.mouse.isDown(2) and us.bases.right then
+			us.bases.right:fire()
+			us.selectedBase = us.bases.right
+		end
 	end
 
 	for i,b in pairs(us.bases) do
