@@ -60,9 +60,10 @@ function loadLevel(levelNum)
 	if us.bases.left.x > us.bases.right.x then
 		us.bases.left, us.bases.right = us.bases.right, us.bases.left
 	end
+	if not us.selectedBase then
+		us.selectedBase = us.bases[1]
+	end
 	-- Draw bases to asteroid canvas
-	baseImgW = baseImg:getWidth()
-	baseImgH = baseImg:getHeight()
 	love.graphics.setColor(255,255,255)
 	for _,b in ipairs(us.bases) do
 		love.graphics.draw(baseImg, b.x, b.y, 0, 1, 1, math.ceil(baseImgW/2), math.ceil(baseImgH/2))

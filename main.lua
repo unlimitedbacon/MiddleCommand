@@ -37,10 +37,14 @@ function love.load()
 	explosionShader = love.graphics.newShader("shaders/explosionShader.glsl")
 	smoothShader = love.graphics.newShader("shaders/smoothShader.glsl")
 	maskShader = love.graphics.newShader("shaders/mask.glsl")
+	glowShader = love.graphics.newShader("shaders/glow.glsl")
 
 	-- Load Textures
 	asteroidImg = love.graphics.newImage('textures/asteroid.png')
 	baseImg = love.graphics.newImage('textures/base.png')
+	baseImgW = baseImg:getWidth()
+	baseImgH = baseImg:getHeight()
+	baseOutlineImg = love.graphics.newImage('textures/baseOutline.png')
 	cityImg = love.graphics.newImage('textures/city.png')
 	ourTrailImg = love.graphics.newImage('textures/redTrail.png')
 	ourFlameImg = love.graphics.newImage('textures/redFlame.png')
@@ -65,9 +69,11 @@ end
 function love.update(dt)
 	if love.mouse.isDown(1) and us.bases.left then
 		us.bases.left:fire()
+		us.selectedBase = us.bases.left
 	end
 	if love.mouse.isDown(2) and us.bases.right then
 		us.bases.right:fire()
+		us.selectedBase = us.bases.right
 	end
 
 	for i,b in pairs(us.bases) do
@@ -134,6 +140,17 @@ function love.draw()
 	-- Starfield
 	love.graphics.draw(backgroundImg)
 
+	-- Outline around selected base
+	if us.selectedBase then
+		love.graphics.setCanvas()
+		--love.graphics.setShader(glowShader)
+		--glowShader:send("size",{baseImgW,baseImgH})
+		love.graphics.setColor({255,0,0,255})
+		love.graphics.draw(baseOutlineImg, us.selectedBase.x, us.selectedBase.y, 0, 1, 1, math.ceil(baseImgW/2), math.ceil(baseImgH/2))
+		--love.graphics.setShader()
+		love.graphics.setColor({255,255,255,255})
+	end
+
 	-- Asteroids, Cities, and Bases
 	love.graphics.draw(asteroidCanvas)
 
@@ -158,6 +175,18 @@ function love.draw()
 	if levelWon and not gameOver then
 		textInABox("YOU WIN\nPress Enter")
 	end
+end
+
+function love.touchpressed( id, x, y, dx, dy, pressure )
+	for _,b in ipairs(us.bases) do
+		if x > b.x-baseImgW and x < b.x+baseImgW then
+			if y > b.y-baseImgH and y < b.y+baseImgH then
+				us.selectedBase = b
+				return
+			end
+		end
+	end
+	us.selectedBase:fire()
 end
 
 function love.keypressed(k)
